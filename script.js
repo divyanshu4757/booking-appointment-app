@@ -7,11 +7,61 @@ let phone = document.getElementById('tel');
 
 
 form.addEventListener('submit' ,(e)=>{
-    e.preventDefault();
-    
 
+    e.preventDefault();
+
+    const userId = document.querySelector('input[name="userId"]').value;
+
+    if(userId) {
+        axios({
+             method:'put',
+             url: `https://crudcrud.com/api/58db2725e4244229b93332a67d5ad2cb/appointmentApp/${userId}`,
+             data:{
+                 Name:name.value,
+                 Email:email.value,
+                 Phone:phone.value,
+             }
+        })
+        .then((res)=>{
+
+            
+            let li =  document.createElement('li');
+             
+            li.append(document.createTextNode(name.value));
+            li.append(document.createTextNode("-"));
+        
+            li.append(document.createTextNode(email.value));
+            li.append(document.createTextNode("-"));
+        
+            li.append(document.createTextNode(phone.value));
     
-      
+    
+            li.append(document.createTextNode(userId));
+    
+           
+        
+            let button =  document.createElement('button');
+            button.textContent = "delete";
+            button.className="btn btn-secondary delete-that"
+            li.append(button);
+        
+            let edit =  document.createElement('button');
+            edit.textContent = "edit";
+            edit.className="btn btn-success edit"
+            li.append(edit);
+           
+            ul.appendChild(li);
+        
+            name.value = '';
+            email.value ='';
+            phone.value ='';
+
+            document.querySelector('input[name="userId"]').remove();
+        })
+        .catch(err => console.log(err));
+    }
+
+    else{
 
     axios({
         method: 'post',
@@ -58,7 +108,7 @@ form.addEventListener('submit' ,(e)=>{
         phone.value ='';})
       .catch(err=>console.log(err));
 
-
+      }
 
 
 })
@@ -74,8 +124,7 @@ ul.addEventListener('click',(e)=>{
 
        let id = parent.childNodes[5].textContent;
 
-       console.log(id);
-
+ 
 
        axios.delete(`https://crudcrud.com/api/58db2725e4244229b93332a67d5ad2cb/appointmentApp/${id}`)
 .then((res)=>{ parent.remove();})
@@ -87,7 +136,7 @@ ul.addEventListener('click',(e)=>{
 
 
     if(e.target.classList.contains("edit")){
-        console.log(e.target.classList);
+      
         let parent = e.target.parentNode;
         const nthName = parent.childNodes[0].textContent;
 
@@ -95,11 +144,18 @@ ul.addEventListener('click',(e)=>{
 
         const nthNum = parent.childNodes[4].textContent;
 
-        console.log(nthEmail);
+       
         name.value = nthName;
         email.value = nthEmail;
         phone.value = nthNum;
-        
+
+        let id = parent.childNodes[5].textContent;
+        const hiddenIdInput = document.createElement('input');
+        hiddenIdInput.type = "hidden";
+        hiddenIdInput.name = "userId";
+        hiddenIdInput.value = id;
+        form.appendChild(hiddenIdInput);
+
         parent.remove();
     }
 })
@@ -137,10 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     li.append(document.createTextNode(id));
 
 
-    console.log(li); // Check if li is defined and what it contains
-    console.log(li.childNodes); // Check the child nodes of li
-    console.log(li.childNodes[5]); // Check if li.childNodes[5] is defined
-
+  
     let button =  document.createElement('button');
     button.textContent = "delete";
     button.className="btn btn-secondary delete-that"
