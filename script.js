@@ -88,3 +88,50 @@ ul.addEventListener('click',(e)=>{
         parent.remove();
     }
 })
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    axios('https://crudcrud.com/api/58db2725e4244229b93332a67d5ad2cb/appointmentApp')
+.then((res)=>{
+
+
+    for(let i=0; i<res.data.length; i++) {
+
+    let n = res.data[i].Name;
+    let e = res.data[i].Email;
+    let p = res.data[i].Phone;
+   
+    console.log(n);
+    console.log(e);
+    console.log(p);
+
+    let li =  document.createElement('li');
+    li.append(document.createTextNode(n));
+    li.append(document.createTextNode("-"));
+    
+    li.append(document.createTextNode(e));
+    li.append(document.createTextNode("-"));
+    
+    li.append(document.createTextNode(p));
+    
+
+    let button =  document.createElement('button');
+    button.textContent = "delete";
+    button.className="btn btn-secondary delete-that"
+    li.append(button);
+
+    let edit =  document.createElement('button');
+        edit.textContent = "edit";
+        edit.className="btn btn-success edit"
+        li.append(edit);
+
+     ul.appendChild(li);
+    console.log(li);
+    }
+
+    })
+.catch(err=>console.log(err));
+  });
