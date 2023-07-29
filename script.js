@@ -24,6 +24,8 @@ form.addEventListener('submit' ,(e)=>{
       })
       .then((res)=>{
 
+        let id = res.data._id;
+
         let li =  document.createElement('li');
          
         li.append(document.createTextNode(name.value));
@@ -33,6 +35,11 @@ form.addEventListener('submit' ,(e)=>{
         li.append(document.createTextNode("-"));
     
         li.append(document.createTextNode(phone.value));
+
+
+        li.append(document.createTextNode(id));
+
+       
     
         let button =  document.createElement('button');
         button.textContent = "delete";
@@ -43,7 +50,7 @@ form.addEventListener('submit' ,(e)=>{
         edit.textContent = "edit";
         edit.className="btn btn-success edit"
         li.append(edit);
-    
+       
         ul.appendChild(li);
     
         name.value = '';
@@ -59,17 +66,25 @@ form.addEventListener('submit' ,(e)=>{
 
 ul.addEventListener('click',(e)=>{
     if(e.target.classList.contains("delete-that")){
-        let parent = e.target.parentNode;
-        console.log(parent );
 
+        let parent = e.target.parentNode;
         
-        
-       
       const nthElementChild =parent.childNodes[2].textContent;
-       console.log(nthElementChild);
        
-          parent.remove();
+
+       let id = parent.childNodes[5].textContent;
+
+       console.log(id);
+
+
+       axios.delete(`https://crudcrud.com/api/58db2725e4244229b93332a67d5ad2cb/appointmentApp/${id}`)
+.then((res)=>{ parent.remove();})
+.catch(err=>console.log(err));
+
+       
+         
     }   
+
 
     if(e.target.classList.contains("edit")){
         console.log(e.target.classList);
@@ -103,10 +118,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let n = res.data[i].Name;
     let e = res.data[i].Email;
     let p = res.data[i].Phone;
+    let id = res.data[i]._id;
+ 
+
+
    
-    console.log(n);
-    console.log(e);
-    console.log(p);
+ 
+
 
     let li =  document.createElement('li');
     li.append(document.createTextNode(n));
@@ -116,7 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
     li.append(document.createTextNode("-"));
     
     li.append(document.createTextNode(p));
-    
+    li.append(document.createTextNode(id));
+
+
+    console.log(li); // Check if li is defined and what it contains
+    console.log(li.childNodes); // Check the child nodes of li
+    console.log(li.childNodes[5]); // Check if li.childNodes[5] is defined
 
     let button =  document.createElement('button');
     button.textContent = "delete";
@@ -129,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
         li.append(edit);
 
      ul.appendChild(li);
-    console.log(li);
+  
     }
 
     })
